@@ -16,12 +16,13 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky install",
-    "lint": "eslint --ext .ts,.vue src"
+    "lint": "eslint --ext .ts,.vue src",
+    "commit": "cz"
   },
   "lint-staged": {
     "*.{ts,vue,js}": [
       "npm run lint",
-      "vitest related"
+      "npx prettier --write ."
     ]
   },
   "config": {
@@ -45,6 +46,8 @@
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-vue": "^10.4.0",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
