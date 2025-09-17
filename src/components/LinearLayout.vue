@@ -39,17 +39,14 @@ const mapFlex = (val: AlignJustify | undefined, axis: "main" | "cross") => {
 }
 
 const layoutStyle = computed<CSSProperties>(() => {
-  // main axis
   const justifyContent = typeof props.justify === "string"
       ? mapFlex(props.justify, "main")
       : undefined
 
-  // cross axis
   const alignItems = typeof props.align === "string"
       ? mapFlex(props.align, "cross")
       : undefined
 
-  // gap
   let rowGap: string | undefined
   let columnGap: string | undefined
 
@@ -63,7 +60,6 @@ const layoutStyle = computed<CSSProperties>(() => {
     else columnGap = `${props.align}px`
   }
 
-  // buat object final, hapus undefined agar type-safe
   const style: CSSProperties = {
     display: "flex",
     flexDirection: props.direction === "vertical" ? "column" : "row",
