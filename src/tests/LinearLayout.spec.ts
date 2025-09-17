@@ -1,6 +1,7 @@
-﻿import { mount } from "@vue/test-utils"
+﻿import {mount, VueWrapper} from "@vue/test-utils"
 import { describe, it, expect } from "vitest"
-import LinearLayout from "../components/LinearLayout.vue"
+import LinearLayout, {type AlignJustify} from "../components/LinearLayout.vue"
+import type {ComponentPublicInstance} from "vue";
 
 describe("LinearLayout", () => {
     it("default props", () => {
@@ -70,31 +71,49 @@ describe("LinearLayout", () => {
     })
 
     it("falls back to flex-start when invalid string is passed", () => {
-        const wrapper = mount(LinearLayout, { props: { align: "invalid" as any } })
-        const style = (wrapper.vm as any).layoutStyle
+        const invalidAlign = "invalid" as unknown as AlignJustify
+
+        const wrapper = mount(LinearLayout, {
+            props: { align: invalidAlign },
+        }) as VueWrapper<LinearLayoutInstance>
+
+        const style = wrapper.vm.layoutStyle
         expect(style.alignItems).toBe("flex-start")
     })
 
     it("maps stretch differently on main vs cross axis", () => {
-        const cross = mount(LinearLayout, { props: { align: "stretch" } })
-        expect((cross.vm as any).layoutStyle.alignItems).toBe("stretch")
+        const cross = mount(LinearLayout, {
+            props: { align: "stretch" },
+        }) as VueWrapper<LinearLayoutInstance>
 
-        const main = mount(LinearLayout, { props: { justify: "stretch" } })
-        expect((main.vm as any).layoutStyle.justifyContent).toBe("flex-start")
+        expect(cross.vm.layoutStyle.alignItems).toBe("stretch")
+
+        const main = mount(LinearLayout, {
+            props: { justify: "stretch" },
+        }) as VueWrapper<LinearLayoutInstance>
+
+        expect(main.vm.layoutStyle.justifyContent).toBe("flex-start")
     })
+
+
+    type LinearLayoutInstance = ComponentPublicInstance<{
+        layoutStyle: Record<string, string>
+    }>
 
     it("applies numeric justify and align gaps correctly", () => {
         const horizontal = mount(LinearLayout, {
             props: { direction: "horizontal", justify: 10, align: 5 },
-        })
-        const hStyle = (horizontal.vm as any).layoutStyle
+        }) as VueWrapper<LinearLayoutInstance>
+
+        const hStyle = horizontal.vm.layoutStyle
         expect(hStyle.columnGap).toBe("10px")
         expect(hStyle.rowGap).toBe("5px")
 
         const vertical = mount(LinearLayout, {
             props: { direction: "vertical", justify: 10, align: 5 },
-        })
-        const vStyle = (vertical.vm as any).layoutStyle
+        }) as VueWrapper<LinearLayoutInstance>
+
+        const vStyle = vertical.vm.layoutStyle
         expect(vStyle.rowGap).toBe("10px")
         expect(vStyle.columnGap).toBe("5px")
     })

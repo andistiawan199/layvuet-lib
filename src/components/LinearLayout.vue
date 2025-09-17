@@ -4,7 +4,7 @@ import type { CSSProperties } from "vue"
 
 type Direction = "vertical" | "horizontal"
 type Size = "auto" | `${number}%` | `${number}px` | `${number}rem` | string
-type AlignJustify =
+export type AlignJustify =
     | "start"
     | "center"
     | "end"
